@@ -24,11 +24,13 @@ io.on("connection", (socket) => {
   let userCount = io.engine.clientsCount
   console.log(`User Connected: ${socket.id}`)
 
-  socket.on("join_room", (data) => {
-    socket.join(data);
-    console.log(`userCount: ${userCount} User with ID: ${socket.id} joined room: ${data}`);
-    const clientsInRoom = io.sockets.adapter.rooms.get(data)?.size ?? 0;
-    io.to(data).emit("room_count", clientsInRoom);
+  socket.on("join_room", (roomID) => { //roomID -> room id (unique hash)
+    socket.join(roomID);
+    console.log(`useCount: ${userCount}`)
+    console.log(`room id: ${roomID}`)
+    console.log(`socket.id: ${socket.id}`)
+    const clientsInRoom = io.sockets.adapter.rooms.get(roomID)?.size ?? 0;
+    io.to(roomID).emit("room_count", clientsInRoom);
     io.emit("user_count", io.engine.clientsCount);
   });
 
@@ -42,7 +44,7 @@ io.on("connection", (socket) => {
     console.log("User Disconnected", socket.id);
     const clientsInRoom = io.sockets.adapter.rooms.get(data)?.size ?? 0;
     io.to(data).emit("room_count", clientsInRoom);
-    io.emit("user_count", userCount);
+    // io.emit("user_count", userCount);
   });
 });
 
