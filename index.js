@@ -12,8 +12,8 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    // origin: "https://realtimechatappclient.onrender.com",
-    origin: "http://localhost:3000",
+    origin: "https://64d34e6c8b916e3e7fec71e2--thunderous-licorice-61075f.netlify.app/",
+    // origin: "http://localhost:3000",
     methods: ["GET", "POST"],
   },
 });
