@@ -11,21 +11,13 @@ app.use(cors({ origin: "*" }));
 
 const server = http.createServer(app);
 
-const io = require("socket.io")(server, {
+const io = new Server(server, {
   cors: {
     origin: "https://chatappclient2-0.onrender.com",
     // origin: "http://localhost:3000",
-    methods: ["GET", "POST"]
-  }
+    methods: ["GET", "POST"],
+  },
 });
-
-// const io = new Server(server, {
-//   cors: {
-//     origin: "https://chatappclient2-0.onrender.com",
-//     // origin: "http://localhost:3000",
-//     methods: ["GET", "POST"],
-//   },
-// });
 
 let userNamesRoom = {}
 let roomLimit = {}
