@@ -6,15 +6,15 @@ const { Server } = require("socket.io");
 
 require("dotenv").config()
 
-// app.use(cors());
-app.use(cors({ origin: "*" }));
+app.use(cors());
+// app.use(cors({ origin: "*" }));
 
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://chatappclient2-0.onrender.com",
-    // origin: "http://localhost:3000",
+    // origin: "https://chatappclient2-0.onrender.com",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
   },
 });
@@ -87,6 +87,17 @@ io.on("connection", (socket) => {
       } else {
         socket.join(369)
       }
+  });
+
+  // Listen for file data and send it to the recipient
+  socket.on("file:data", (data) => {
+    console.log("Received file data from:", socket.id);
+    console.log(`data in server: ${data}`)
+    // Relay the file data to the recipient
+      socket.to(data.to).emit("file:data", {
+      from: socket.id,
+      data: data.data,
+    });
   });
 
   socket.on("send_message", (data) => {
