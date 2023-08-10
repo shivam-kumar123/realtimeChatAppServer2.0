@@ -12,11 +12,13 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://64d463f3681b8822b620f1f7--fluffy-souffle-ad3e68.netlify.app/",
-    // origin: "http://localhost:3000",
+    // origin: "https://64d463f3681b8822b620f1f7--fluffy-souffle-ad3e68.netlify.app/",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
   },
 });
+
+let userNamesRoom = {}
 
 io.on("connection", (socket) => {
 
@@ -24,14 +26,21 @@ io.on("connection", (socket) => {
   let userCount = io.engine.clientsCount
   console.log(`User Connected: ${socket.id}`)
 
-  socket.on("join_room", (roomID) => { //roomID -> room id (unique hash)
+  socket.on("join_room", (roomID, name) => { //roomID -> room id (unique hash)
     socket.join(roomID);
     console.log(`useCount: ${userCount}`)
     console.log(`room id: ${roomID}`)
     console.log(`socket.id: ${socket.id}`)
+    console.log(`name is: ${name}`)
+    if (!userNamesRoom.hasOwnProperty(roomID)) {
+      userNamesRoom[roomID] = [];
+  }
+    userNamesRoom[roomID].push(name);
     const clientsInRoom = io.sockets.adapter.rooms.get(roomID)?.size ?? 0;
     io.to(roomID).emit("room_count", clientsInRoom);
-    io.emit("user_count", io.engine.clientsCount);
+    const names_server_to_client_room = [...userNamesRoom[roomID]]
+    io.to(roomID).emit("room_names", names_server_to_client_room);
+    // io.emit("user_count", io.engine.clientsCount);
   });
 
   socket.on("send_message", (data) => {
