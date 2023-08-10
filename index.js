@@ -18,6 +18,8 @@ const io = new Server(server, {
   },
 });
 
+const PortNumber = process.env.PORT || 3001
+
 let userNamesRoom = {}
 let roomLimit = {}
 
@@ -102,6 +104,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(process.env.PORT || 3001, () => {
-  console.log("SERVER RUNNING");
+server.listen(PortNumber, () => {
+  console.log(`SERVER RUNNING on port ${PortNumber}`);
 });
