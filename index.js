@@ -9,16 +9,23 @@ require("dotenv").config()
 // app.use(cors());
 app.use(cors({ origin: "*" }));
 
-
 const server = http.createServer(app);
 
-const io = new Server(server, {
+const io = require("socket.io")(server, {
   cors: {
     origin: "https://chatappclient2-0.onrender.com",
     // origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
-  },
+    methods: ["GET", "POST"]
+  }
 });
+
+// const io = new Server(server, {
+//   cors: {
+//     origin: "https://chatappclient2-0.onrender.com",
+//     // origin: "http://localhost:3000",
+//     methods: ["GET", "POST"],
+//   },
+// });
 
 let userNamesRoom = {}
 let roomLimit = {}
