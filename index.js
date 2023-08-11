@@ -7,14 +7,13 @@ const { Server } = require("socket.io");
 require("dotenv").config()
 
 app.use(cors());
-// app.use(cors({ origin: "*" }));
 
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://chatappclient2-0.onrender.com",
-    // origin: "http://localhost:3000",
+    // origin: "https://chatappclient2-0.onrender.com",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
   },
 });
@@ -105,11 +104,12 @@ io.on("connection", (socket) => {
     socket.to(data.room).emit("receive_message", data);
   });
 
-  socket.on("disconnect", (data) => {
+  socket.on("leave_room", (data) => {
     userCount = io.engine.clientsCount
     console.log("User Disconnected", socket.id);
     const clientsInRoom = io.sockets.adapter.rooms.get(data)?.size ?? 0;
     io.to(data).emit("room_count", clientsInRoom);
+    socket.disconnect();
     // io.emit("user_count", userCount);
   });
 });
