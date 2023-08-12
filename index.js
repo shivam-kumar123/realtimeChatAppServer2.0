@@ -3,10 +3,14 @@ const app = express();
 const http = require("http");
 const cors = require("cors");
 const { Server } = require("socket.io");
+const bodyParser = require("body-parser");
 
 require("dotenv").config();
 
 app.use(cors());
+
+app.use(express.json({ limit: "10mb" })); // Increasing the JSON payload size limit
+app.use(express.urlencoded({ limit: "10mb", extended: true })); // Increasing the URL-encoded payload size limit
 
 const server = http.createServer(app);
 
@@ -15,6 +19,7 @@ const io = new Server(server, {
     origin: process.env.HOSTED_CLIENT,
     methods: ["GET", "POST"],
   },
+  maxHttpBufferSize: 1e8,
 });
 
 let userNamesRoom = {};
