@@ -1,5 +1,5 @@
 # CLIENT Code
-https://github.com/shivam-kumar123/realtimeChatAppClient2.0/tree/main
+https://github.com/shivam-kumar123/realtimeChatAppClient2.0
 
 # ChatAppServer
 
