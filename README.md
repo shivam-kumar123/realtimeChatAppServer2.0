@@ -9,7 +9,7 @@ Welcome to ChatAppServer, the backend for a real-time chat application that allo
 
 - Real-time messaging
 - Picture and PDF sharing (up to 10 MB)
-- - [Live Demo](https://chatappclient2-0.onrender.com/)
+- [Live Demo](https://chatappclient2-0.onrender.com/)
 
 ## Getting Started
 
