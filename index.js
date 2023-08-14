@@ -16,7 +16,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.HOSTED_CLIENT_LOCAL,
+    origin: process.env.HOSTED_CLIENT,
     methods: ["GET", "POST"],
   },
   maxHttpBufferSize: 1e8,
@@ -28,7 +28,6 @@ let roomLimit = {};
 io.on("connection", (socket) => {
 
   socket.emit("your_id", socket.id);
-  let userCount = io.engine.clientsCount;
 
   socket.on("join_room_admin", (roomID, name, limit) => { //roomID -> room id (unique hash)
     if(!roomLimit.hasOwnProperty(roomID)){
@@ -44,8 +43,6 @@ io.on("connection", (socket) => {
       if(!roomLimit.hasOwnProperty(roomID)){
         roomLimit[roomID] = limit
       }
-      const clientsInRoom = io.sockets.adapter.rooms.get(roomID)?.size ?? 0;
-        io.to(roomID).emit("room_count", clientsInRoom);
         const names_server_to_client_room = [...userNamesRoom[roomID]];
         io.to(roomID).emit("room_names", names_server_to_client_room);
     } else{
@@ -54,7 +51,8 @@ io.on("connection", (socket) => {
   });
 
   socket.on("join_room_user", (roomID, name) => { //roomID -> room id (unique hash)
-    const clientsInRoom = io.sockets.adapter.rooms.get(roomID)?.size ?? 0;
+    let clientsInRoom = 0;
+    if (userNamesRoom.hasOwnProperty(roomID)) clientsInRoom = userNamesRoom[roomID].length;
       if(roomLimit[roomID] >= clientsInRoom + 1){
         try{
           socket.join(roomID);
@@ -65,7 +63,6 @@ io.on("connection", (socket) => {
           userNamesRoom[roomID] = [];
         }
         userNamesRoom[roomID].push(name);
-        io.to(roomID).emit("room_count", clientsInRoom);
         const names_server_to_client_room = [...userNamesRoom[roomID]]
         io.to(roomID).emit("room_names", names_server_to_client_room);
         io.to(roomID).emit("join_user_msg", name);
@@ -89,10 +86,15 @@ io.on("connection", (socket) => {
     socket.to(data.room).emit("receive_message", data);
   });
 
-  socket.on("leave_room", (data) => {
-    userCount = io.engine.clientsCount
-    const clientsInRoom = io.sockets.adapter.rooms.get(data)?.size ?? 0;
-    io.to(data).emit("room_count", clientsInRoom);
+  socket.on("leave_room", (roomID, nameLeavingRoom) => {
+
+    const namesInRoom = [...userNamesRoom[roomID]];
+    userNamesRoom[roomID] = namesInRoom.filter((name) => name !== nameLeavingRoom);
+    if (userNamesRoom[roomID].length === 0) {
+        delete userNamesRoom[roomID];
+        delete roomLimit[roomID];
+    }
+    io.to(roomID).emit("room_names", userNamesRoom[roomID]);
     socket.disconnect();
   });
 });
