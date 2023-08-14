@@ -4,6 +4,7 @@ https://github.com/shivam-kumar123/realtimeChatAppClient2.0/tree/main
 # ChatAppServer
 
 Welcome to ChatAppServer, the backend for a real-time chat application that allows users to share pictures and PDFs with a 10 MB limit.
+Uses Socket.io for real-time, full duplex, bidirectional communication. The server is coded in Node.js.
 
 ## Features
 
