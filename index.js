@@ -16,7 +16,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.HOSTED_CLIENT,
+    origin: process.env.HOSTED_CLIENT_LOCAL,
     methods: ["GET", "POST"],
   },
   maxHttpBufferSize: 1e8,
@@ -65,9 +65,10 @@ io.on("connection", (socket) => {
           userNamesRoom[roomID] = [];
         }
         userNamesRoom[roomID].push(name);
-        io.to(roomID).emit("room_count", clientsInRoom + 1);
+        io.to(roomID).emit("room_count", clientsInRoom);
         const names_server_to_client_room = [...userNamesRoom[roomID]]
         io.to(roomID).emit("room_names", names_server_to_client_room);
+        io.to(roomID).emit("join_user_msg", name);
       } else {
         socket.join(process.env.DEFAULT_ROOM_ID)
       }
