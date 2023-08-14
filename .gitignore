@@ -1,15 +1,2 @@
 # environment variables
 .env
-
-#const data = socket.handshake;
-#const clientIp = socket.request.connection.remoteAddress;
-#console.log(`IP: ${socket.handshake.address}`);
-#console.log(`host: ${data.headers.host}`);
-#console.log(`browser data: ${data.headers['sec-ch-ua']}`);
-#console.log(`mobile-user-data: ${data.headers['sec-ch-ua-mobile']}`);
-#console.log(`OS: ${data.headers['sec-ch-ua-platform']}`);
-#console.log(`site-data: ${data.headers['sec-fetch-site']}`);
-#console.log(`referer: ${data.headers.referer}`);
-#console.log(`language: ${data.headers['accept-language']}`);
-#console.log(`time: ${data.time}`);
-#console.log("socket.handshake:", JSON.stringify(socket.handshake, null, 10));
