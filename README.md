@@ -24,10 +24,10 @@ To run the server locally, follow these steps:
 Runs the server in the development mode.\
 make sure to give the correct path to environment variables locally.
 
-# Contributing
+## Contributing
 Contributions are welcome! Please fork the repository and create a pull request.
 
-# BSD 3-Clause "New" or "Revised" License
+## BSD 3-Clause "New" or "Revised" License
 
-# IMPORTANT
+## IMPORTANT
 Please consider showing your support by giving this repository a star. Your gesture would be greatly appreciated :)
